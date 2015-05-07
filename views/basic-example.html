@@ -1,0 +1,108 @@
+
+<!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+  <div ui-tree-handle class="tree-node tree-node-content" ng-class="{'question':node.type=='question', 'answer':node.type=='answer'}" ng-init="nameEditing = false;settingsEdit=false;">
+    <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)">
+      <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
+    </a>
+    
+    {{node.text}}
+
+    
+
+    <a class="pull-right btn btn-xs remove" data-nodrag ng-click="remove(this)">
+      <span class="glyphicon glyphicon-remove"></span>
+    </a>
+
+    <a class="pull-right btn btn-xs add" data-nodrag ng-click="newSubItem(this)" >
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>
+
+    <a class="pull-right btn btn-xs edit" data-nodrag="" ng-click="nameEdit = true;" >
+      <span class="glyphicon glyphicon-pencil"></span>
+    </a>
+
+    <a ng-show="node.type=='answer'" class="pull-right btn btn-xs settings" data-nodrag ng-click="settingsEdit = true;">
+      <span class="glyphicon glyphicon-wrench "></span>
+    </a>
+
+
+<div class="group-title angular-ui-tree-handle" data-nodrag ng-show="nameEdit">
+    <form class="form-inline" role="form">
+      <div class="form-group">
+        <label class="sr-only" for="nodeName">{{node.title}}</label>
+        <input type="text" class="form-control" placeholder="{{node.text}}" ng-model="newname">
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="saveName(node, newname);nameEdit = false;">Save</button>
+      <button type="submit" class="btn btn-default" ng-click="nameEdit = false;">Cancel</button>
+    </form>
+  </div>
+
+  <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="settingsEdit" ng-init="numProducts = 1;">
+    <form class="form-inline" role="form">
+      <div class="form-group">
+        <span># of products: {{numProducts}}</span>
+        <button type="submit" class="btn btn-xs btn-default" ng-click="numProducts=numProducts+1;">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        <button type="submit" class="btn btn-xs btn-default" ng-click="numProducts = minus(numProducts);">
+          <span class="glyphicon glyphicon-minus"></span>
+        </button>
+        
+      </div>
+      
+    </form>
+    
+    <div ng-repeat=" n in [].constructor(numProducts) track by $index">
+      <form class="form-inline">
+      <div class="form-group">
+        <span>Product #{{$index+1}}</span>
+        <input type="text" class="form-control" placeholder="Product name" ng-model="productName" />
+        <input type="text" class="form-control" placeholder="Product sku" ng-model="productSku" />
+        <input type="text" class="form-control" placeholder="Product link" ng-model="productLink" />
+        <input type="text" class="form-control" placeholder="Product image" ng-model="productImg" />
+      </div>
+
+
+      </form>
+
+    </div>
+    <button class="btn btn-primary">Add Products</button>
+  </div>
+
+
+
+  </div>
+
+  
+
+
+
+  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+    <li ng-repeat="node in node.nodes track by $index" ui-tree-node ng-include="'nodes_renderer.html'">
+    </li>
+  </ol>
+</script>
+
+<div class="row">
+  <div class="col-sm-12">
+    <h3>Product Tree Maker</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div ui-tree id="tree-root">
+      <ol ui-tree-nodes ng-model="data">
+        <li ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="info">
+      {{info}}
+    </div>
+    <pre class="code">{{ data | json }}</pre>
+  </div>
+</div>
