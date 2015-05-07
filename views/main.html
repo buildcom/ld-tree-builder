@@ -1,7 +1,7 @@
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-  <div ui-tree-handle class="tree-node tree-node-content" ng-class="{'question':node.type=='question', 'answer':node.type=='answer'}" ng-init="nameEditing = false;settingsEdit=false;">
+  <div ui-tree-handle class="tree-node tree-node-content" ng-class="{'question':node.type=='question', 'answer':node.type=='answer'}" ng-init="nameEditing = false;settingsEdit=false;" ng-hide="node.type=='product'">
     <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)">
       <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
     </a>
@@ -9,7 +9,7 @@
     {{node.text}}
 
     
-
+    <!-- node header -->
     <a class="pull-right btn btn-xs remove" data-nodrag ng-click="remove(this)">
       <span class="glyphicon glyphicon-remove"></span>
     </a>
@@ -18,66 +18,66 @@
       <span class="glyphicon glyphicon-plus"></span>
     </a>
 
-    <a class="pull-right btn btn-xs edit" data-nodrag="" ng-click="nameEdit = true;" >
+    <a class="pull-right btn btn-xs edit" data-nodrag="" ng-click="nameEdit = !nameEdit;" >
       <span class="glyphicon glyphicon-pencil"></span>
     </a>
 
-    <a ng-show="node.type=='answer'" class="pull-right btn btn-xs settings" data-nodrag ng-click="settingsEdit = true;">
+    <a ng-show="node.type=='answer'" class="pull-right btn btn-xs settings" data-nodrag ng-click="settingsEdit = !settingsEdit;">
       <span class="glyphicon glyphicon-wrench "></span>
     </a>
 
+    <!-- edit name -->
+    <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="nameEdit">
+      <form class="form-inline" role="form">
+        <div class="form-group">
+          <label class="sr-only" for="nodeName">{{node.title}}</label>
+          <input type="text" class="form-control" placeholder="{{node.text}}" ng-model="newname">
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="saveName(node, newname);nameEdit = false;">Save</button>
+        <button type="submit" class="btn btn-default" ng-click="nameEdit = false;">Cancel</button>
+      </form>
+    </div>
 
-<div class="group-title angular-ui-tree-handle" data-nodrag ng-show="nameEdit">
-    <form class="form-inline" role="form">
-      <div class="form-group">
-        <label class="sr-only" for="nodeName">{{node.title}}</label>
-        <input type="text" class="form-control" placeholder="{{node.text}}" ng-model="newname">
-      </div>
-      <button type="submit" class="btn btn-default" ng-click="saveName(node, newname);nameEdit = false;">Save</button>
-      <button type="submit" class="btn btn-default" ng-click="nameEdit = false;">Cancel</button>
-    </form>
-  </div>
+    <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="settingsEdit" ng-init="numProducts = 1;">
+      <form class="form-inline" role="form">
+        <div class="form-group">
+          <div>
+            <span> Answer image:</span> <input type="text" class="form-control" placeholder="{{node.img}}" ng-model="answerURL">
+            <button type="submit" class="btn btn-xs btn-default saveProductInfo" ng-click="saveImage(node, answerURL);"><span class="glyphicon glyphicon-ok"></span></button>
+          </div>
 
-  <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="settingsEdit" ng-init="numProducts = 1;">
-    <form class="form-inline" role="form">
-      <div class="form-group">
-        <span># of products: {{numProducts}}</span>
-        <button type="submit" class="btn btn-xs btn-default" ng-click="numProducts=numProducts+1;">
-          <span class="glyphicon glyphicon-plus"></span>
-        </button>
-        <button type="submit" class="btn btn-xs btn-default" ng-click="numProducts = minus(numProducts);">
-          <span class="glyphicon glyphicon-minus"></span>
-        </button>
-        
-      </div>
-      
-    </form>
-    
-    <div ng-repeat=" n in [].constructor(numProducts) track by $index">
-      <form class="form-inline">
-      <div class="form-group">
-        <span>Product #{{$index+1}}</span>
-        <input type="text" class="form-control" placeholder="Product name" ng-model="productName" />
-        <input type="text" class="form-control" placeholder="Product sku" ng-model="productSku" />
-        <input type="text" class="form-control" placeholder="Product link" ng-model="productLink" />
-        <input type="text" class="form-control" placeholder="Product image" ng-model="productImg" />
-      </div>
-
-
+          <span># of products: {{node.nodes.length}}</span>
+          <button type="submit" class="btn btn-xs btn-default" ng-click="addProduct(node)">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+          <button type="submit" class="btn btn-xs btn-default" ng-click="removeProduct(node)">
+            <span class="glyphicon glyphicon-minus"></span>
+          </button>
+        </div>
       </form>
 
+      <!-- edit product nodes -->
+      <div ng-repeat="n in node.nodes">
+        <form class="form-inline" ng-show="n.type =='product'">
+          <div class="form-group">
+            <span>Product #{{$index+1}}</span></br>
+            <input type="text" class="form-control productInfo" placeholder="{{n.name}}" ng-model="productName" />
+            <input type="text" class="form-control productInfo" placeholder="{{n.sku}}" ng-model="productSku" />
+            <input type="text" class="form-control productInfo" placeholder="{{n.link}}" ng-model="productLink" />
+            <input type="text" class="form-control productInfo" placeholder="{{n.img}}" ng-model="productImg" />
+            <input type="text" class="form-control productInfo" placeholder="{{n.price}}" ng-model="productPrice" />
+            <button type="submit" class="btn btn-xs btn-default saveProductInfo" ng-click="saveProduct(n, productName, productSku, productLink, productImg, productPrice);">
+              <span class="glyphicon glyphicon-ok"></span>
+            </button>
+            <button type="submit" class="btn btn-xs btn-default remove" ng-click="node.nodes.splice($index, 1);">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    <button class="btn btn-primary">Add Products</button>
   </div>
-
-
-
-  </div>
-
-  
-
-
-
+  <!-- display nodes -->
   <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
     <li ng-repeat="node in node.nodes track by $index" ui-tree-node ng-include="'nodes_renderer.html'">
     </li>
