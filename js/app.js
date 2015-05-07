@@ -49,26 +49,61 @@
       if (nodeData["type"] == "question") {
         newNode["type"] = "answer";
         newNode["text"] = "New Answer";
+        newNode["img"] = "Image URL";
+        nodeData.nodes.push( newNode );
       }
+      // check to see if node.nodes are questions
       else if (nodeData["type"] == "answer") {
-        newNode["type"] = "question";
-        newNode["text"] = "New Question";
+        if(nodeData.nodes.length > 0) {
+          if (nodeData.nodes[0]["type"]=='question') {
+            newNode["type"] = "question";
+            newNode["text"] = "New Question";
+            nodeData.nodes.push( newNode );
+          }
+        }
       }
-
-      
-      nodeData.nodes.push( newNode );
-    };
-
-    $scope.minus = function(n) {
-      if (n > 0) {
-        --n;
-      }
-
-      return n;
-
     };
 
 
+    $scope.saveImage = function(node, imgURL) {
+      node["img"] = imgURL;
+    };
+
+    $scope.addProduct = function(node) {
+      var newNode = {};
+      newNode["type"] = 'product';
+      newNode["sku"] = 'sku';
+      newNode["name"] = 'name';
+      newNode["link"] = 'link';
+      newNode["img"] = 'image';
+      newNode["price"] = 'price';
+      node.nodes.push(newNode);
+    };
+
+    $scope.removeProduct = function(node) {
+      node.nodes.pop();
+    };
+
+    $scope.removeThisProduct = function(node, index) {
+      console.log('remove this product');
+      console.log(node);
+      console.log(index);
+      node.nodes.splice(index, 1);
+      console.log(node);
+    };
+
+    $scope.saveProduct = function(n, productName, productSku, productLink, productImg, productPrice) {
+      if (productName == '' || productName == undefined)   { productName = 'name'; }
+      if (productSku == '' || productSku == undefined)     { productSku = 'sku'; }
+      if (productLink == '' || productLink == undefined)   { productLink = 'link'; }
+      if (productImg == '' || productImg == undefined)     { productImg = 'image'; }
+      if (productPrice == '' || productPrice == undefined) { productPrice = 'price'; }
+      n["sku"] = productSku;
+      n['name'] = productName;
+      n['link'] = productLink;
+      n['img'] = productImg;
+      n['price'] = productPrice;
+    };
 
     $scope.editName = function(editing) {
       $scope.name.editing = true;
@@ -81,7 +116,6 @@
     $scope.saveName = function(node, newname) {
       node.text = newname;
     };
-
 
   });
 
