@@ -7,7 +7,7 @@
       $routeProvider
         .when('/', {
           controller: 'aoeuCtrl',
-          templateUrl: 'views/basic-example.html'
+          templateUrl: 'views/main.html'
         })
         .otherwise({
           redirectTo: '/'
@@ -45,7 +45,6 @@
       var newNode = {};
 
       newNode["nodes"] = [];
-
 
       if (nodeData["type"] == "question") {
         newNode["type"] = "answer";
