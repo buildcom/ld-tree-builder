@@ -54,12 +54,10 @@
       }
       // check to see if node.nodes are questions
       else if (nodeData["type"] == "answer") {
-        if(nodeData.nodes.length > 0) {
-          if (nodeData.nodes[0]["type"]=='question') {
-            newNode["type"] = "question";
-            newNode["text"] = "New Question";
-            nodeData.nodes.push( newNode );
-          }
+        if((nodeData.nodes.length > 0 && nodeData.nodes[0].type=="question") || nodeData.nodes.length == 0) {
+          newNode["type"] = "question";
+          newNode["text"] = "New Question";
+          nodeData.nodes.push( newNode );
         }
       }
     };
