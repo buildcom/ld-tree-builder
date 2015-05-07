@@ -79,7 +79,7 @@
   </div>
   <!-- display nodes -->
   <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
-    <li ng-repeat="node in node.nodes track by $index" ui-tree-node ng-include="'nodes_renderer.html'">
+    <li ng-repeat="node in node.nodes track by $index" ui-tree-node ng-include="'nodes_renderer.html'" ng-hide="node.type=='product'">
     </li>
   </ol>
 </script>
