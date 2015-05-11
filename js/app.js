@@ -38,6 +38,10 @@
       scope.toggle();
     };
 
+    $scope.uploadJson = function  (insertedJson) {
+      $scope.data = JSON.parse(insertedJson);
+    }
+
     $scope.newSubItem = function(scope) {
       var nodeData = scope.$modelValue;
       console.log(nodeData);
