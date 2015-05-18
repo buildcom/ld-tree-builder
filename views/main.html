@@ -61,12 +61,9 @@
         <form class="form-inline" ng-show="n.type =='product'">
           <div class="form-group">
             <span>Product #{{$index+1}}</span></br>
-            <input type="text" class="form-control productInfo" placeholder="{{n.name}}" ng-model="productName" />
             <input type="text" class="form-control productInfo" placeholder="{{n.sku}}" ng-model="productSku" />
-            <input type="text" class="form-control productInfo" placeholder="{{n.link}}" ng-model="productLink" />
-            <input type="text" class="form-control productInfo" placeholder="{{n.img}}" ng-model="productImg" />
-            <input type="text" class="form-control productInfo" placeholder="{{n.price}}" ng-model="productPrice" />
-            <button type="submit" class="btn btn-xs btn-default saveProductInfo" ng-click="saveProduct(n, productName, productSku, productLink, productImg, productPrice);">
+
+            <button type="submit" class="btn btn-xs btn-default saveProductInfo" ng-click="saveProduct(n, productSku);">
               <span class="glyphicon glyphicon-ok"></span>
             </button>
             <button type="submit" class="btn btn-xs btn-default remove" ng-click="node.nodes.splice($index, 1);">

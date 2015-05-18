@@ -75,10 +75,6 @@
       var newNode = {};
       newNode["type"] = 'product';
       newNode["sku"] = 'sku';
-      newNode["name"] = 'name';
-      newNode["link"] = 'link';
-      newNode["img"] = 'image';
-      newNode["price"] = 'price';
       node.nodes.push(newNode);
     };
 
@@ -94,17 +90,11 @@
       console.log(node);
     };
 
-    $scope.saveProduct = function(n, productName, productSku, productLink, productImg, productPrice) {
-      if (productName == '' || productName == undefined)   { productName = 'name'; }
-      if (productSku == '' || productSku == undefined)     { productSku = 'sku'; }
-      if (productLink == '' || productLink == undefined)   { productLink = 'link'; }
-      if (productImg == '' || productImg == undefined)     { productImg = 'image'; }
-      if (productPrice == '' || productPrice == undefined) { productPrice = 'price'; }
+    $scope.saveProduct = function(n, productSku ) {      
+      if (productSku == '' || productSku == undefined)     {
+        productSku = 'sku';
+      }
       n["sku"] = productSku;
-      n['name'] = productName;
-      n['link'] = productLink;
-      n['img'] = productImg;
-      n['price'] = productPrice;
     };
 
     $scope.editName = function(editing) {
